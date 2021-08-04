@@ -20,7 +20,7 @@ const getAllTodos = (req,res)=> {
 };
 
 const getOneTodoItem = (req, res) => {
-    db.collection('todos').doc(req.params.id).get().then(doc=>{
+    db.collection('todos').doc(req.params.todoId).get().then(doc=>{
         let todoData;
         if(!doc.exists){
             return res.status(404).json({error:"Todo item not found"})
