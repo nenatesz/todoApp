@@ -1,5 +1,5 @@
 const {admin_auth, firebase_auth, db} = require('../utils/firebase')
-const {validateLoginData, validateSignUpData} = require('../utils/validators');
+const {validateLoginData, validateSignUpData, validateUpdateData} = require('../utils/validators');
 
 
 
@@ -89,8 +89,25 @@ const getUserDetails = (req, res)=> {
         console.log(error);
         return res.status(500).json({error: error.code})
     })
+};
+
+const updateUserDetails = (req, res) => {
+    const {errors, valid} = validateUpdateData(req.body);
+
+    if(!valid){
+        res.status(400).json(errors)
+    };
+    let document = db.collection('users').doc(req.user.username);
+    document.update(req.body).then(()=>{
+        res.json({message: 'User update successful'})
+    }).catch(error=>{
+        console.error('something went wrong', error);
+        return res.status(500).json({ 
+            message: "Cannot Update the value"
+        })
+    })
 }
 
 
-module.exports = {loginUser, signUpUser, getUserDetails}
+module.exports = {loginUser, signUpUser, getUserDetails, updateUserDetails}
 

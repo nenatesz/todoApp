@@ -1,7 +1,7 @@
 const {db} = require('../utils/firebase')
 
 const getAllTodos = (req,res)=> {
-    db.collection('todos').orderBy('createdAt', 'desc').get().then(data=>{
+    db.collection('todos').where("username", "==", req.user.username).orderBy('createdAt', 'desc').get().then(data=>{
         let todos = [];
         data.forEach(doc=>{
             todos.push({
@@ -19,6 +19,25 @@ const getAllTodos = (req,res)=> {
 
 };
 
+const getOneTodoItem = (req, res) => {
+    db.collection('todos').doc(req.params.id).get().then(doc=>{
+        let todoData;
+        if(!doc.exists){
+            return res.status(404).json({error:"Todo item not found"})
+        }
+        if(doc.data().username !== req.user.username){
+            return res.status(403).json({error: "Unauthorized"})
+        }     
+        todoData = doc.data();
+        todoData.todoId = doc.id
+        return res.json(todoData);
+
+    }).catch(error=>{
+        console.error(error);
+			return res.status(500).json({ error: error.code });
+    })
+}
+
 
 const postTodoItem = (req, res) => {
     if(req.body.body.trim() === ""){
@@ -28,6 +47,7 @@ const postTodoItem = (req, res) => {
         return res.status(400).json({title: "Must not be empty"})
     };
     const newTodoItem = {
+        username: req.user.username,
         title: req.body.title,
         body: req.body.body,
         createdAt: new Date().toISOString()
@@ -80,4 +100,4 @@ const editTodoItem = (req, res) => {
 }
 
 
-module.exports = {getAllTodos, postTodoItem, deleteTodoItem, editTodoItem}
+module.exports = {getAllTodos, getOneTodoItem, postTodoItem, deleteTodoItem, editTodoItem}

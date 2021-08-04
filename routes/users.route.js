@@ -1,14 +1,18 @@
 const express = require('express');
-const {loginUser, signUpUser, getUserDetails } = require('../functions/users.function');
+const {loginUser, signUpUser, getUserDetails, updateUserDetails } = require('../functions/users.function');
 const isUserAuth = require('../utils/auth');
 
 
 const usersRouter = express.Router();
 
-
+// Login User
 usersRouter.post('/login_user', loginUser);
+// SignUp User
 usersRouter.post('/signup_user', signUpUser);
-usersRouter.get('/user', getUserDetails);
+// Get User details
+usersRouter.get('/user', isUserAuth, getUserDetails);
+// Update User Details
+usersRouter.post('/user', isUserAuth, updateUserDetails);
 
 
 
