@@ -1,7 +1,7 @@
 require("firebase/auth");
 const admin = require('firebase-admin');
 const firebase = require('firebase')
-const serviceAccount = require('../todoapp-86b22-firebase-adminsdk-c2yug-25a80f514f');
+const serviceAccount = require('../secret/todoapp-86b22-firebase-adminsdk-c2yug-25a80f514f.json');
 
 
 

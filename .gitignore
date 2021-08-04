@@ -5,6 +5,7 @@ node_modules
 /.pnp
 .pnp.js
 
+
 # testing
 /coverage
 
@@ -22,4 +23,3 @@ node_modules
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-todoapp-86b22-firebase-adminsdk-c2yug-25a80f514f.json
